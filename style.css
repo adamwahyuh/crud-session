@@ -1,0 +1,143 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+body{
+    background-color: #f4f4f4;
+}
+
+label, input, button, select {
+    display: block;
+}
+
+.container-flex{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: auto auto;
+    padding-top:50px;
+    padding-bottom:50px;
+
+    width: 80%;
+    border: solid 3px #380b61;
+    border-radius: 50px;
+
+    margin-top: 100px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+.form-contaner{
+    width: 100%;
+}
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    width: 100%; 
+    margin-bottom: 20px;
+}
+button {
+    background-color: #380b61;
+    color: white;
+    padding: 15px 35px;
+    border: none;
+    border-radius: 25px;
+    transition: all 0.3s ease-in-out;
+}
+
+button:hover {
+    background-color: #ffb411;
+    color: black;
+    cursor: pointer;
+}
+
+label {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+input {
+    padding: 20px;
+    border: #380b61 2px solid;
+    border-radius: 5px;
+    width: 80%; 
+    max-width: 300px; 
+}
+select{
+    width: 50%;
+    padding: 10px;
+    border: #380b61 2px solid;
+    border-radius: 50px;
+}
+
+.list-tugas {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    width: 100%; 
+    gap: 20px;
+}
+.tugas{
+    min-width: 100px;
+    max-width: 100px;
+}
+.waktu{
+    min-width: 50px;
+    max-width: 100px;
+}
+
+ul {
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    width: 80%;
+    max-width: 350px;
+    gap: 10px;
+    padding: 0;
+}
+
+li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 0px 10px;
+
+    margin-right: 5px;
+    border-radius: 5px;
+}
+
+.hapus {
+    text-decoration: none;
+    color: red;
+    transition: all 0.3s ease-in-out;
+}
+
+.hapus:hover {
+    color: #ff7268;
+    transform: scale(2);
+}
+.edit{
+    text-decoration: none;
+    color: #ffa806;
+    transition: all 0.3s ease-in-out;
+}
+.edit:hover{
+    color: rgb(218, 130, 8);
+    transform: scale(2);
+}
+.info{
+    color: blue;
+    transition: all 0.3s ease-in-out;
+}
+.info:hover{
+    color: skyblue;
+}
+a{
+    text-decoration: none;
+}

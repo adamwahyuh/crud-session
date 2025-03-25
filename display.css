@@ -1,0 +1,51 @@
+/* Reset default styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f4f4f4;
+}
+
+.container-flex {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 300px;
+    text-align: center;
+}
+
+.list-tugas {
+    margin: 20px 0;
+}
+
+.list-tugas ol {
+    list-style: none;
+}
+
+.list-tugas li {
+    background: #380b61;
+    color: white;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+a{
+    text-decoration: none;
+    color: red;
+    transition: all 0.3s ease-in-out;
+    margin-top: 30px;
+}
+a:hover{
+    color: #380b61;
+}
