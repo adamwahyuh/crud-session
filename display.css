@@ -1,9 +1,9 @@
-/* Reset default styles */
+@import url('https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&display=swap');
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: Arial, sans-serif;
+    font-family: 'Gloria Hallelujah', Arial, sans-serif;
 }
 
 body {
@@ -11,16 +11,24 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #f4f4f4;
+    background-image: url(paper.jpeg);
+
 }
 
 .container-flex {
-    background: #fff;
-    padding: 20px;
-    border-radius: 10px;
+    background: transparent;
+    padding: 30px 25px;
+    border-radius: 15px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    width: 300px;
+    width: 320px;
     text-align: center;
+    border: 3px dashed #380b61;
+}
+
+h2 {
+    font-size: 24px;
+    color: #380b61;
+    margin-bottom: 15px;
 }
 
 .list-tugas {
@@ -29,23 +37,28 @@ body {
 
 .list-tugas ol {
     list-style: none;
+    padding-left: 0;
+    text-align: left;
 }
 
 .list-tugas li {
-    background: #380b61;
-    color: white;
-    padding: 10px;
-    margin: 5px 0;
-    border-radius: 5px;
+    background: transparent;
+    color: black;
+    padding: 10px 15px;
+    margin: 8px 0;
     font-weight: bold;
 }
 
-a{
-    text-decoration: none;
+
+a {
+    display: inline-block;
+    margin-top: 20px;
     color: red;
+    font-weight: bold;
+    text-decoration: none;
     transition: all 0.3s ease-in-out;
-    margin-top: 30px;
 }
-a:hover{
+
+a:hover {
     color: #380b61;
 }
