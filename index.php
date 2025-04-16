@@ -77,10 +77,10 @@
                 <?php foreach($_SESSION['tugas'] as $idx => $value): ?>
                     <li>
                         <div class="tugas">
-                            <p><?= $value['tugas'] ?></p>
+                            <p>Tugas : <u><?= $value['tugas'] ?></u></p>
                         </div>
                         <div class="waktu">
-                            <p><?= $value['waktu'] ?> jam</p>
+                            <p>Waktu : <?= $value['waktu'] ?> jam</p>
                         </div>
                         <div class="act-button">
                             <a class="hapus" href="?d=<?= $idx ?>"><i class="bi bi-trash3-fill"></i></a>
