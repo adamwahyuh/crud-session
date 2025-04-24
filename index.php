@@ -1,51 +1,68 @@
-<?php 
-    $nama="Adam Wahyu H";
-    session_start();
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        $tugas = $_POST['tugas'];
-        $waktu = $_POST['waktu'];
+<?php
+include("koneksi.php");
+$nama = "Adam";
 
-        // cek kalo inputan kosong -> redirect ke /
-        if(empty($tugas) || empty($waktu)){
-            header('Location: ' . $_SERVER['SCRIPT_NAME']);
+function masukData($tugas, $waktu){
+    global $kon;
+    $sql = "INSERT INTO tugas (deskripsi, waktu) VALUES ('$tugas', '$waktu')";
+    $kon->exec($sql);
+}
+function hapusData($d){
+    global $kon;
+    $sql = "DELETE FROM tugas WHERE id = " . $d;
+    $kon->exec($sql);
+}
+function getAllTugas(){
+    global $kon;
+    $stmt = $kon->query("SELECT * FROM tugas ORDER BY id DESC");
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+function hapusSemuaData(){
+    global $kon;
+    $kon->exec("DELETE FROM tugas");
+}
 
-        }
-        else {
-            // cek kalo session tugas udah ada
-            if(isset($_SESSION['tugas'])){
-                // push ke session tugas
-                array_push($_SESSION['tugas'], ['tugas' => $tugas, 'waktu' => $waktu]);
-            }
-            else {
-                // kalo session tugas belum ada, buat session tugas
-                $_SESSION['tugas'] = [['tugas' => $tugas, 'waktu' => $waktu]];
-            }
-            header('Location: ' . $_SERVER['SCRIPT_NAME']);
-        }
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $tugas = $_POST['tugas'];
+    $waktuStr = $_POST['waktu'];
+    $waktu = (int) $waktuStr;
+
+    if (empty($tugas) || empty($waktu)) {
+        header('Location: ' . $_SERVER['SCRIPT_NAME']);
+        exit;
+    } else {
+        masukData($tugas, $waktu);
+        header('Location: ' . $_SERVER['SCRIPT_NAME']);
+        exit;
+    }
+}
+
+// Handle request GET (hapus atau hapus semua)
+if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+    $method = isset($_GET['method']) ? $_GET['method'] : false;
+    if ($method === "hapus-semua"){
+        hapusSemuaData();
+        header('Location: ' . $_SERVER['SCRIPT_NAME']);
+        exit;
     }
 
-    if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-        $method = isset($_GET['method']) ? $_GET['method'] : false;
-        if ($method === "hapus-semua"){
-            session_destroy();
-            header('Location: ' . $_SERVER['SCRIPT_NAME']);
-        }
-
-        $delete = isset($_GET['d']) ? $_GET['d'] : false;
-        if($delete !== false){
-            unset($_SESSION['tugas'][$delete]);
-            header('Location: ' . $_SERVER['SCRIPT_NAME']);
-        }
+    $delete = isset($_GET['d']) ? $_GET['d'] : false;
+    if ($delete !== false){
+        hapusData($delete);
+        header('Location: ' . $_SERVER['SCRIPT_NAME']);
+        exit;
     }
+}
+$tugasList = getAllTugas();
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
     <title>Todo App - <?= $nama; ?></title>
+    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 <body>
@@ -58,7 +75,6 @@
             <form action="/" method="post">
                 <label for="tugas">Masukan tugasmu</label>
                 <input type="text" name="tugas" id="tugas" required>
-                <!-- <label for="waktu">Waktu mengerjakan: </label> -->
                 <select name="waktu" id="waktu" required>
                     <option value="0" disabled selected>Pilih waktu pengerjaan</option>
                     <?php 
@@ -67,41 +83,40 @@
                         }
                     ?>
                 </select>
-                <button type="submit">simpan</button>
+                <button type="submit">Simpan</button>
             </form>
         </div>
         <div class="list-tugas">
-        <?php if(isset($_SESSION['tugas'])): ?>
-            <h2>Daftar Tugas</h2>
-            <ul>
-                <?php foreach($_SESSION['tugas'] as $idx => $value): ?>
-                    <li>
-                        <div class="tugas">
-                            <p>Tugas : <u><?= $value['tugas'] ?></u></p>
-                        </div>
-                        <div class="waktu">
-                            <p>Waktu : <?= $value['waktu'] ?> jam</p>
-                        </div>
-                        <div class="act-button">
-                            <a class="hapus" href="?d=<?= $idx ?>"><i class="bi bi-trash3-fill"></i></a>
-                            <a class="edit" href="u.php?u=<?= $idx ?>"><i class="bi bi-pencil-fill"></i></a>
-                            <a class="info" href="display.php?u=<?= $idx ?>"><i class="bi bi-eye-fill"></i></a>
-                        </div>
-                    </li>
-                <?php endforeach; ?>
-            </ul>
-            <?php else :?>
+            <?php if(!empty($tugasList)): ?>
+                <h2>Daftar Tugas</h2>
+                <ul>
+                    <?php foreach($tugasList as $value): ?>
+                        <li>
+                            <div class="tugas">
+                                <p>Tugas : <u><?= htmlspecialchars($value['deskripsi']) ?></u></p>
+                            </div>
+                            <div class="waktu">
+                                <p>Waktu : <?= $value['waktu'] ?> jam</p>
+                            </div>
+                            <div class="act-button">
+                                <a class="hapus" href="?d=<?= $value['id'] ?>"><i class="bi bi-trash3-fill"></i></a>
+                                <a class="edit" href="u.php?u=<?= $value['id'] ?>"><i class="bi bi-pencil-fill"></i></a>
+                                <a class="info" href="display.php?u=<?= $value['id'] ?>"><i class="bi bi-eye-fill"></i></a>
+                            </div>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            <?php else: ?>
                 <p>Belum ada tugas</p>
-        <?php endif;
-        ?>
+            <?php endif; ?>
         </div>
     </div>
 
     <div class="some-button">
-        <a class="bomb-sess" href="?method=hapus-semua"><i class="bi bi-file-earmark-x-fill"></i></a>
+        <a class="bomb-sess" href="?method=hapus-semua" onclick="return confirm('Bomb database with love :)')">
+            <i class="bi bi-file-earmark-x-fill"></i>
+        </a>
     </div>
 </main>
-
-
 </body>
 </html>
