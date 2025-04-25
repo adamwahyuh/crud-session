@@ -3,19 +3,6 @@
 include("koneksi.php");
 $id = isset($_GET['u']) ? $_GET['u'] : false;
 
-function getAllTugasById($id) {
-    global $kon;
-    if (!$id) {
-        header('Location: /');
-        exit();
-    } else {
-        $stmt = $kon->prepare("SELECT * FROM tugas WHERE id = :id");
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-        $stmt->execute();
-    }
-
-    return $stmt->fetchAll(PDO::FETCH_ASSOC); 
-}
 $tugasList = getAllTugasById($id);
 // cek kalo tugas kosong 
 if (!$tugasList) {

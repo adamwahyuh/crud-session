@@ -2,34 +2,7 @@
 include("koneksi.php");
 $id = isset($_GET['u']) ? $_GET['u'] : false;
 
-function getAllTugasById($id) {
-    global $kon;
-    if (!$id) {
-        header('Location: /');
-        exit();
-    } else {
-        $stmt = $kon->prepare("SELECT * FROM tugas WHERE id = :id");
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-        $stmt->execute();
-    }
-
-    return $stmt->fetchAll(PDO::FETCH_ASSOC); 
-}
-
-function updateTugas($id, $deskripsi, $waktu){
-    global $kon;
-    if (empty($deskripsi) || empty($waktu)){
-        header('Location: /');
-        exit();
-    }
-    
-    $stmt = $kon->prepare("UPDATE tugas SET deskripsi = :deskripsi, waktu = :waktu WHERE id = :id");
-    $stmt->bindParam(':deskripsi', $deskripsi);
-    $stmt->bindParam(':waktu', $waktu, PDO::PARAM_INT);
-    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-    return $stmt->execute();
-}
-
+// panggil func
 $tugasList = getAllTugasById($id);
 // cek kalo tugas kosong 
 if (!$tugasList) {
@@ -48,7 +21,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         header('Location: ' . $_SERVER['SCRIPT_NAME']);
         exit;
     } else {
-        // Menggunakan $tugasPost untuk update
         updateTugas($id, $tugasPost, $waktu);
         header('Location: ' . $_SERVER['SCRIPT_NAME']);
         exit;

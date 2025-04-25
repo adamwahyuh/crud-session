@@ -2,26 +2,6 @@
 include("koneksi.php");
 $nama = "Adam";
 
-function masukData($tugas, $waktu){
-    global $kon;
-    $sql = "INSERT INTO tugas (deskripsi, waktu) VALUES ('$tugas', '$waktu')";
-    $kon->exec($sql);
-}
-function hapusData($d){
-    global $kon;
-    $sql = "DELETE FROM tugas WHERE id = " . $d;
-    $kon->exec($sql);
-}
-function getAllTugas(){
-    global $kon;
-    $stmt = $kon->query("SELECT * FROM tugas ORDER BY id DESC");
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
-function hapusSemuaData(){
-    global $kon;
-    $kon->exec("DELETE FROM tugas");
-}
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $tugas = $_POST['tugas'];
     $waktuStr = $_POST['waktu'];
