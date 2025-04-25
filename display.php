@@ -3,7 +3,7 @@
 include("koneksi.php");
 $id = isset($_GET['u']) ? $_GET['u'] : false;
 
-$tugasList = getAllTugasById($id);
+$tugasList = $db->getAllTugasById($id);
 // cek kalo tugas kosong 
 if (!$tugasList) {
     header('Location: /');

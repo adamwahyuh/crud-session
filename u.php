@@ -1,9 +1,10 @@
 <?php
 include("koneksi.php");
+
 $id = isset($_GET['u']) ? $_GET['u'] : false;
 
 // panggil func
-$tugasList = getAllTugasById($id);
+$tugasList = $db->getAllTugasById($id);
 // cek kalo tugas kosong 
 if (!$tugasList) {
     header('Location: /');
@@ -21,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         header('Location: ' . $_SERVER['SCRIPT_NAME']);
         exit;
     } else {
-        updateTugas($id, $tugasPost, $waktu);
+        $db->updateTugas($id, $tugasPost, $waktu);
         header('Location: ' . $_SERVER['SCRIPT_NAME']);
         exit;
     }

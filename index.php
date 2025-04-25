@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         header('Location: ' . $_SERVER['SCRIPT_NAME']);
         exit;
     } else {
-        masukData($tugas, $waktu);
+        $db->masukData($tugas, $waktu);
         header('Location: ' . $_SERVER['SCRIPT_NAME']);
         exit;
     }
@@ -21,20 +21,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $method = isset($_GET['method']) ? $_GET['method'] : false;
     if ($method === "hapus-semua"){
-        hapusSemuaData();
+        $db->hapusSemuaData();
         header('Location: ' . $_SERVER['SCRIPT_NAME']);
         exit;
     }
 
     $delete = isset($_GET['d']) ? $_GET['d'] : false;
     if ($delete !== false){
-        hapusData($delete);
+        $db->hapusData($delete);
         header('Location: ' . $_SERVER['SCRIPT_NAME']);
         exit;
     }
 }
 
-$tugasList = getAllTugas();
+$tugasList = $db->getAllTugas();
 
 ?>
 
