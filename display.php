@@ -1,14 +1,28 @@
 <?php 
-    session_start();
 
-    $idx = isset($_GET['u']) ? $_GET['u'] : false;
+include("koneksi.php");
+$id = isset($_GET['u']) ? $_GET['u'] : false;
 
-    if ($idx === false || !isset($_SESSION['tugas'][$idx])) {
+function getAllTugasById($id) {
+    global $kon;
+    if (!$id) {
         header('Location: /');
+        exit();
+    } else {
+        $stmt = $kon->prepare("SELECT * FROM tugas WHERE id = :id");
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
     }
 
-    $tugas = $_SESSION['tugas'][$idx]['tugas'];
-    $waktu = $_SESSION['tugas'][$idx]['waktu'];
+    return $stmt->fetchAll(PDO::FETCH_ASSOC); 
+}
+$tugasList = getAllTugasById($id);
+// cek kalo tugas kosong 
+if (!$tugasList) {
+    header('Location: /');
+    exit();
+}
+$tugas = $tugasList[0] ?? ['deskripsi' => '', 'waktu' => ''];
 
 ?>
 
@@ -26,8 +40,9 @@
         <h2>Tugas :</h2>
         <div class="list-tugas">
             <ol>
-                <li><?= $tugas ?></li>
-                <li><?= $waktu ?></li>
+                <li><?= htmlspecialchars($tugas['deskripsi']); ?></li>
+                <h2 style="text-align: center;">Waktu :</h2>
+                <li><?= htmlspecialchars($tugas['waktu']); ?> Jam</li>
             </ol>
         </div>
         <a href="index.php">Kembali</a>
