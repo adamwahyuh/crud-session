@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
-// Handle request GET (hapus atau hapus semua)
+// Handle request GET Hapus / Delete all the Data From Database
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $method = isset($_GET['method']) ? $_GET['method'] : false;
     if ($method === "hapus-semua"){
@@ -53,7 +53,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         exit;
     }
 }
+
 $tugasList = getAllTugas();
+
 ?>
 
 <!DOCTYPE html>

@@ -1,35 +1,67 @@
 <?php
-    session_start();
-    $idx = isset($_GET['u']) ? $_GET['u'] : false;
+include("koneksi.php");
+$id = isset($_GET['u']) ? $_GET['u'] : false;
 
-    // kalo index tidak ada atau blom ada sessionnya -> redirect -> /
-    if ($idx === false || !isset($_SESSION['tugas'][$idx])) {
+function getAllTugasById($id) {
+    global $kon;
+    if (!$id) {
         header('Location: /');
+        exit();
+    } else {
+        $stmt = $kon->prepare("SELECT * FROM tugas WHERE id = :id");
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
     }
 
-    // ambil data dari session
-    $tugas = $_SESSION['tugas'][$idx]['tugas'];
-    $waktu = $_SESSION['tugas'][$idx]['waktu'];
+    return $stmt->fetchAll(PDO::FETCH_ASSOC); 
+}
 
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        $tugas = $_POST['tugas'];
-        $waktu = $_POST['waktu'];
-
-        // jika 2 data yang diinputkan tidak kosong maka simpan data yang baru trus redirect -> /
-        if (!empty($tugas) && !empty($waktu)) {
-            $_SESSION['tugas'][$idx] = ['tugas' => $tugas, 'waktu' => $waktu];
-            header('Location: /');
-            exit; 
-        }
+function updateTugas($id, $deskripsi, $waktu){
+    global $kon;
+    if (empty($deskripsi) || empty($waktu)){
+        header('Location: /');
+        exit();
     }
-    ?>
+    
+    $stmt = $kon->prepare("UPDATE tugas SET deskripsi = :deskripsi, waktu = :waktu WHERE id = :id");
+    $stmt->bindParam(':deskripsi', $deskripsi);
+    $stmt->bindParam(':waktu', $waktu, PDO::PARAM_INT);
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    return $stmt->execute();
+}
+
+$tugasList = getAllTugasById($id);
+// cek kalo tugas kosong 
+if (!$tugasList) {
+    header('Location: /');
+    exit();
+}
+// Ambil arr pertama setelah di ambil data dari id-nya di atas
+$tugas = $tugasList[0] ?? ['deskripsi' => '', 'waktu' => ''];
+
+// Update 
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $tugasPost = $_POST['tugas'];
+    $waktuStr = $_POST['waktu'];  
+    $waktu = (int) $waktuStr;
+    if (empty($tugasPost) || empty($waktu)) {
+        header('Location: ' . $_SERVER['SCRIPT_NAME']);
+        exit;
+    } else {
+        // Menggunakan $tugasPost untuk update
+        updateTugas($id, $tugasPost, $waktu);
+        header('Location: ' . $_SERVER['SCRIPT_NAME']);
+        exit;
+    }
+}
+?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit - <?= $tugas ?></title>
+    <title>Edit - <?= htmlspecialchars($tugas['deskripsi']) ?></title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -38,18 +70,17 @@
         <div class="form-container">
             <form action="" method="post"> 
                 <label for="tugas">Masukkan tugasmu</label>
-                <input type="text" name="tugas" id="tugas" value="<?= htmlspecialchars($tugas); ?>" required>
+                <input type="text" name="tugas" id="tugas" value="<?= htmlspecialchars($tugas['deskripsi']); ?>" required>
+
                 <label for="waktu">Waktu mengerjakan:</label>
                 <select name="waktu" id="waktu">
                     <?php 
                         for ($i = 1; $i <= 24; $i++) {
-                            // loop sampai ketemu waktu yang ke select
-                            $selected = ($i == $waktu) ? 'selected' : ''; 
+                            $selected = ($i == $tugas['waktu']) ? 'selected' : ''; 
                             echo "<option value='$i' $selected>$i</option>";
                         }
                     ?>
                 </select>
-                
                 <button type="submit">Simpan</button>
                 <a href="index.php">Batal</a>
             </form>
