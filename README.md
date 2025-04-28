@@ -1,5 +1,5 @@
-# CRUD dengan Sqlite
-Aplikasi ini adalah implementasi CRUD menggunakan Sqlite di PHP
+# CRUD dengan Sqlite3
+Aplikasi ini adalah implementasi CRUD menggunakan basis data sqlite3 di PHP.
 
 # HAK CIPTA 
 Dibuat oleh Adam Wahyu Hariyadi (202359201009) 2025
